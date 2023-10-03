@@ -80,9 +80,11 @@ end
 function MoveBoard:checkBoundaries()
 
     if self.vLocation.y < self.vMinXY.y then
+
         self.vLocation.y = self.vMinXY.y
         self.vVelocity = self.vVelocity * 0
     elseif self.vLocation.y + self.vSize.y > self.vMaxXY.y then
+        
         self.vLocation.y = self.vMaxXY.y - self.vSize.y
         self.vVelocity = self.vVelocity * 0
     end

@@ -10,7 +10,7 @@ function love.load()
 
     love.graphics.setBackgroundColor(240 / 255, 190 / 255, 172 / 255)
 
-    puck = Puck:create(Vector:create(width / 2, height / 2), 15)
+    puck = Puck:create(Vector:create(width / 2, height / 2), 15, Vector:create(0, 0), Vector:create(width, height))
 
     leftBoard = MoveBoard:create(Vector:create(25, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height))
     rightBoard = MoveBoard:create(Vector:create(width - 25 - 30, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height))
@@ -21,6 +21,11 @@ function love.update(dt)
 
     leftBoard:update()
     rightBoard:update()
+
+    -- if leftBoard:isInside(puck:getVLocation()) then
+
+    -- end
+
 
 end
 
