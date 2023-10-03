@@ -55,6 +55,11 @@ function Vector:div(value)
     self.y = self.y / value
 end
 
+function Vector:dot(other)
+    local res = self.x * other.x + self.y * other.y
+    return res
+end
+
 function Vector:mag()
     return math.sqrt(self.x * self.x + self.y * self.y)
 end
