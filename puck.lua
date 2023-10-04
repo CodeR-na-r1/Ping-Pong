@@ -1,7 +1,7 @@
 Puck = {}
 Puck.__index = Puck
 
-function Puck:create(vLocation, iSize, vMinXY, vMaxXY)
+function Puck:create(vLocation, iSize, vMinXY, vMaxXY, maxVelocity)
     local puck = {}
     setmetatable(puck, Puck)
 
@@ -11,6 +11,8 @@ function Puck:create(vLocation, iSize, vMinXY, vMaxXY)
     puck.vMinXY = vMinXY
     puck.vMaxXY = vMaxXY
 
+    puck.maxVelocity = maxVelocity or 3
+
     puck.isMove = false
     puck.iCounter = 0
 
@@ -19,12 +21,21 @@ function Puck:create(vLocation, iSize, vMinXY, vMaxXY)
     puck.vVelocity = Vector:create(0, 0)
     puck.vAcceleration = Vector:create(0, 0)
 
+    puck.staticVAcceleration = Vector:create(0, 0)
+
     return puck
 end
 
-function Puck:update()
+function Puck:update(dt)
 
+    self.vAcceleration = self.vAcceleration + self.staticVAcceleration
 
+    self.vVelocity = self.vVelocity + self.vAcceleration
+    self.vVelocity = self.vVelocity:limit(self.maxVelocity)
+
+    self.vLocation = self.vLocation + self.vVelocity * dt
+    
+    self.vAcceleration = self.vAcceleration * 0
 
 end
 
@@ -34,8 +45,34 @@ function Puck:draw()
 
 end
 
+function Puck:setVAcceleration(value)
+
+    self.staticVAcceleration = value
+
+end
+
+function Puck:resetVAcceleration()
+
+    self.staticVAcceleration = Vector:create(0, 0)
+
+end
+
+function setMaxVelocity(value)
+
+    self.maxVelocity = value
+
+end
+
+-- selectors
+
 function Puck:getVLocation()
 
     return self.vLocation
+
+end
+
+function Puck:invertVVelocity()
+
+    self.vVelocity = self.vVelocity * -1
 
 end
