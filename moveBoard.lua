@@ -22,28 +22,30 @@ function MoveBoard:create(vLocation, vSize, vMinXY, vMaxXY)
     moveBoard.vVelocity = Vector:create(0, 0)
     moveBoard.vAcceleration = Vector:create(0, 0)
 
+    moveBoard.animationScale = 5
+
     return moveBoard
 
 end
 
-function MoveBoard:update()
+function MoveBoard:update(dt)
 
     if self.isMove then
 
         self.vVelocity = self.vVelocity + self.vAcceleration
-        self.vLocation = self.vLocation + self.vVelocity
+        self.vLocation = self.vLocation + self.vVelocity * dt
 
         self:checkBoundaries()
 
         if self.iCounter < 30 then
-            self.vAcceleration = self.vAcceleration * 0.2
+            self.vAcceleration = self.vAcceleration / self.animationScale
 
         elseif self.iCounter < 60 then
             if self.iCounter == 30 then
                 self.vAcceleration = self.vAcceleration * -1
             end
 
-            self.vAcceleration = self.vAcceleration * 5
+            self.vAcceleration = self.vAcceleration * self.animationScale
 
         else
             self.vVelocity = self.vVelocity * 0

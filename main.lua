@@ -10,7 +10,7 @@ function love.load()
 
     love.graphics.setBackgroundColor(240 / 255, 190 / 255, 172 / 255)
 
-    puck = Puck:create(Vector:create(width / 2, height / 2), 15, Vector:create(0, 0), Vector:create(width, height))
+    puck = Puck:create(Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height))
 
     leftBoard = MoveBoard:create(Vector:create(25, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height))
     rightBoard = MoveBoard:create(Vector:create(width - 25 - 30, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height))
@@ -19,8 +19,8 @@ end
 
 function love.update(dt)
 
-    leftBoard:update()
-    rightBoard:update()
+    leftBoard:update(dt)
+    rightBoard:update(dt)
 
     -- if leftBoard:isInside(puck:getVLocation()) then
 
@@ -46,17 +46,17 @@ function love.keypressed(key)
     -- print(key)
 
     if key == 'w' then
-        leftBoard:applyForce(Vector:create(0, -1.5))
+        leftBoard:applyForce(Vector:create(0, -150))
     end
     if key == 's' then
-        leftBoard:applyForce(Vector:create(0, 1.5))
+        leftBoard:applyForce(Vector:create(0, 150))
     end
 
     if key == 'up' then
-        rightBoard:applyForce(Vector:create(0, -1.5))
+        rightBoard:applyForce(Vector:create(0, -150))
     end
     if key == 'down' then
-        rightBoard:applyForce(Vector:create(0, 1.5))
+        rightBoard:applyForce(Vector:create(0, 150))
     end
 
 end
