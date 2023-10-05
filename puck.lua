@@ -1,9 +1,12 @@
 Puck = {}
 Puck.__index = Puck
 
-function Puck:create(vLocation, iSize, vMinXY, vMaxXY, maxVelocity)
+function Puck:create(texture, vLocation, iSize, vMinXY, vMaxXY, maxVelocity)
+
     local puck = {}
     setmetatable(puck, Puck)
+
+    puck.texture = texture
 
     puck.vLocation = vLocation
     puck.iSize = iSize
@@ -43,7 +46,8 @@ end
 
 function Puck:draw()
 
-    love.graphics.circle("fill", self.vLocation.x, self.vLocation.y, self.iSize)
+    love.graphics.draw(self.texture, self.vLocation.x, self.vLocation.y)--, 0, self.vSize.x, self.vSize.y)
+    -- love.graphics.circle("fill", self.vLocation.x, self.vLocation.y, self.iSize)
 
 end
 
@@ -103,6 +107,7 @@ end
 
 function Puck:invertVVelocity()
 
-    self.vVelocity = self.vVelocity * -1
+        self.vVelocity.x = self.vVelocity.x * -1
+        self.staticVAcceleration.x = self.staticVAcceleration.x * -1
 
 end

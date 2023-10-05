@@ -3,16 +3,20 @@ require "vector"
 MoveBoard = {}
 MoveBoard.__index = MoveBoard
 
-function MoveBoard:create(vLocation, vSize, vMinXY, vMaxXY)
+function MoveBoard:create(texture, vLocation, vSize, vMinXY, vMaxXY, maxVelocity)
     
     local moveBoard = {}
     setmetatable(moveBoard, MoveBoard)
+
+    moveBoard.texture = texture
 
     moveBoard.vLocation = vLocation
     moveBoard.vSize = vSize
 
     moveBoard.vMinXY = vMinXY
     moveBoard.vMaxXY = vMaxXY
+
+    moveBoard.maxVelocity = maxVelocity or 3
 
     moveBoard.isMove = false
     moveBoard.iCounter = 0
@@ -33,15 +37,16 @@ function MoveBoard:update(dt)
     if self.isMove then
 
         self.vVelocity = self.vVelocity + self.vAcceleration
+        self.vVelocity = self.vVelocity:limit(self.maxVelocity)
         self.vLocation = self.vLocation + self.vVelocity * dt
 
         self:checkBoundaries()
 
-        if self.iCounter < 30 then
+        if self.iCounter < 10 then
             self.vAcceleration = self.vAcceleration / self.animationScale
 
-        elseif self.iCounter < 60 then
-            if self.iCounter == 30 then
+        elseif self.iCounter < 20 then
+            if self.iCounter == 10 then
                 self.vAcceleration = self.vAcceleration * -1
             end
 
@@ -61,7 +66,8 @@ end
 
 function MoveBoard:draw()
 
-    love.graphics.rectangle("fill", self.vLocation.x, self.vLocation.y, self.vSize.x, self.vSize.y)
+    -- love.graphics.rectangle("fill", self.vLocation.x, self.vLocation.y, self.vSize.x, self.vSize.y)
+    love.graphics.draw(self.texture, self.vLocation.x, self.vLocation.y)--, 0, self.vSize.x, self.vSize.y)
 
 end
 
