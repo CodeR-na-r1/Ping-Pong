@@ -11,7 +11,7 @@ function love.load()
     love.graphics.setBackgroundColor(240 / 255, 190 / 255, 172 / 255)
 
     puck = Puck:create(Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 300)
-    puck:setVAcceleration(Vector:create(-10, 0))
+    puck:setVAcceleration(Vector:create(-10, 03))
 
     leftBoard = MoveBoard:create(Vector:create(25, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height))
     rightBoard = MoveBoard:create(Vector:create(width - 25 - 30, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height))

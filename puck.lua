@@ -37,11 +37,41 @@ function Puck:update(dt)
     
     self.vAcceleration = self.vAcceleration * 0
 
+    self:checkBoundaries()
+
 end
 
 function Puck:draw()
 
     love.graphics.circle("fill", self.vLocation.x, self.vLocation.y, self.iSize)
+
+end
+
+function Puck:checkBoundaries()
+
+    if self.vLocation.x - self.iSize < self.vMinXY.x then
+
+        self.vLocation.x = self.vMinXY.x + self.iSize
+        self.vVelocity.x = self.vVelocity.x * -1
+        self.staticVAcceleration.x = self.staticVAcceleration.x * -1
+    elseif self.vLocation.x + self.iSize > self.vMaxXY.x then
+        
+        self.vLocation.x = self.vMaxXY.x - self.iSize
+        self.vVelocity.x = self.vVelocity.x * -1
+        self.staticVAcceleration.x = self.staticVAcceleration.x * -1
+    end
+
+    if self.vLocation.y - self.iSize < self.vMinXY.y then
+
+        self.vLocation.y = self.vMinXY.y + self.iSize
+        self.vVelocity.y = self.vVelocity.y * -1
+        self.staticVAcceleration.y = self.staticVAcceleration.y * -1
+    elseif self.vLocation.y + self.iSize > self.vMaxXY.y then
+        
+        self.vLocation.y = self.vMaxXY.y - self.iSize
+        self.vVelocity.y = self.vVelocity.y * -1
+        self.staticVAcceleration.y = self.staticVAcceleration.y * -1
+    end
 
 end
 
