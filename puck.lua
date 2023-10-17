@@ -46,7 +46,7 @@ end
 
 function Puck:draw()
 
-    love.graphics.draw(self.texture, self.vLocation.x, self.vLocation.y)--, 0, self.vSize.x, self.vSize.y)
+    love.graphics.draw(self.texture, self.vLocation.x - self.iSize - 17, self.vLocation.y - self.iSize - 17, 0, 1, 1)
     -- love.graphics.circle("fill", self.vLocation.x, self.vLocation.y, self.iSize)
 
 end
@@ -91,7 +91,7 @@ function Puck:resetVAcceleration()
 
 end
 
-function setMaxVelocity(value)
+function Puck:setMaxVelocity(value)
 
     self.maxVelocity = value
 

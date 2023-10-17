@@ -20,7 +20,6 @@ function Game:create(puckObj, moveBoardLeft, moveBoardRight)
     end
 
     game._isInside = false
-    game._isLeftDir = false
 
     game.__initPoints = 0
 
@@ -30,7 +29,6 @@ end
 function Game:update(dt)
 
     self._isInside = false
-    self._isLeftDir = false
     
     -- updates points position
     for i = 0, self.qPoints do
@@ -39,12 +37,10 @@ function Game:update(dt)
         self.points[i][1] = self.puckObj.iSize * math.sin(self.angles[i]) + self.puckObj.vLocation.y
 
         if self:isInside(i) then
+            
             self._isInside = true
             self.__initPoints = i
-            if self.puckObj.vVelocity.x < 0 then
-                self._isLeftDir = true
             break
-            end
         end
     end
     
@@ -92,6 +88,16 @@ function Game:isInside(countPoint)
 
     if (point[0] > xyBoard.x and point[0] < xyBoard.x + maxxyBoard.x
         and point[1] > xyBoard.y and point[1] < xyBoard.y + maxxyBoard.y) then
+
+        return true
+    end
+
+    return false
+end
+
+function Game:isLeftDir()
+
+    if self.puckObj.vVelocity.x < 0 then
 
         return true
     end
