@@ -15,6 +15,7 @@ function love.load()
     moveBoardImg = love.graphics.newImage("resources/img/boardImg.png")
 
     font = love.graphics.newFont("resources/font/SPACE.ttf", 32)
+    fontScore = love.graphics.newFont("resources/font/SPACE.ttf", 50)
     love.graphics.setFont(font)
 
     width = love.graphics.getWidth()
@@ -30,7 +31,7 @@ function love.load()
 
     game = Game:create(puck, leftBoard, rightBoard)
 
-    gameAgent = GameAgent:create()
+    gameAgent = GameAgent:create(fontScore)
 
     stopGame = true
     isReInit = true

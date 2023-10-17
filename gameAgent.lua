@@ -3,13 +3,15 @@ require "textFormatter"
 GameAgent = {}
 GameAgent.__index = GameAgent
 
-function GameAgent:create()
+function GameAgent:create(font)
 
     local gameAgent = {}
     setmetatable(gameAgent, GameAgent)
 
     gameAgent.leftScore = 0
     gameAgent.rightScore = 0
+
+    gameAgent.font = font
 
     return gameAgent
 end
@@ -26,5 +28,5 @@ end
 
 function GameAgent:draw()
 
-    drawCenteredText(self.leftScore .. " : " .. self.rightScore, width / 2, 50, 100)
+    drawCenteredText(self.leftScore .. " : " .. self.rightScore, width / 2, 50, self.font)
 end

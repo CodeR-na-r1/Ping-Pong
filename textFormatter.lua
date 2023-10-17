@@ -1,25 +1,23 @@
-function drawCenteredText(text, x, y, frontSize)
+function drawCenteredText(text, x, y, font)
 
-	frontSize = frontSize or nil
+	_font = nil or font
 
 	local fontCopy = love.graphics.getFont()
-	local textWidth = fontCopy:getWidth(text)
-	local textHeight = fontCopy:getHeight()
+	local textWidth = nil
+	local textHeight = nil
 
-	if fontSize == nil then
-		print("nill")
+	if _font == nil then
+		textWidth = fontCopy:getWidth(text)
+		textHeight = fontCopy:getHeight()
 	else
-		print("not nill")
-		love.graphics.setFont(fontCopy, fontSize)
+		love.graphics.setFont(_font)
+		textWidth = _font:getWidth(text)
+		textHeight = _font:getHeight()
 	end
-
 
 	love.graphics.print(text, x - textWidth/2, y - textHeight/2)
 
-	if fontSize == nil then
-		print("nill")
-	else
-		print("not nill")
+	if _font ~= nil then
 		love.graphics.setFont(fontCopy)
 	end
 end
