@@ -5,6 +5,7 @@ require "textFormatter"
 
 require "game"
 require "gameAgent"
+require "artificalPlayer"
 
 function love.load()
 
@@ -32,6 +33,8 @@ function love.load()
     game = Game:create(puck, leftBoard, rightBoard)
 
     gameAgent = GameAgent:create(fontScore)
+
+    artificalPlayer = ArtificalPlayer:create(puck, leftBoard)
 
     stopGame = true
     isReInit = true
@@ -83,6 +86,8 @@ function love.update(dt)
 
         keyboardEvent()
 
+        artificalPlayer:update(dt)
+
     else
 
         if isReInit == false then
@@ -99,6 +104,8 @@ function love.update(dt)
             rightBoard = MoveBoard:create(moveBoardImg, Vector:create(width - 25 - 30, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height), 600)
             
             game = Game:create(puck, leftBoard, rightBoard)
+
+            artificalPlayer = ArtificalPlayer:create(puck, leftBoard)
 
             isReInit = true
         end
