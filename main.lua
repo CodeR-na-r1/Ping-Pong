@@ -56,6 +56,7 @@ function love.update(dt)
             
             if game._isInside then
                 puck:invertVVelocity()
+                puck:randomizeYDirection()
                 if puck.maxVelocity < 1000 then
                     puck:setMaxVelocity(puck.maxVelocity * 1.04)
                     leftBoard:setMaxVelocity(puck.maxVelocity * 1.3)
@@ -72,6 +73,7 @@ function love.update(dt)
             
             if game._isInside then
                 puck:invertVVelocity()
+                puck:randomizeYDirection()
                 if puck.maxVelocity < 1000 then
                     puck:setMaxVelocity(puck.maxVelocity * 1.04)
                     rightBoard:setMaxVelocity(puck.maxVelocity * 1.3)

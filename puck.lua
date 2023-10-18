@@ -111,3 +111,16 @@ function Puck:invertVVelocity()
         self.staticVAcceleration.x = self.staticVAcceleration.x * -1
 
 end
+
+function Puck:randomizeYDirection()
+
+    yRatio = math.random(1, 200)
+
+    newDir = self.vVelocity:norm()
+    newDir.y = newDir.y * yRatio
+    newDir = newDir:norm()
+
+    self.vVelocity.x = self.vVelocity.x * math.abs(newDir.x)
+    self.vVelocity.y = self.vVelocity.y * math.abs(newDir.y)
+
+end
