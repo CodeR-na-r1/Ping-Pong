@@ -21,7 +21,7 @@ StateMenu = {
 
 -- Class description: displaying the desired menu items
 
-function Menu:create(state, fontSrc, isOnePlayer, startBackgroundImg, choiseBackgroundImg, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, yesBtn, yesBtnHover, noBtn, noBtnHover)
+function Menu:create(state, fontSrc, isOnePlayer, startBackgroundImg, choiseBackgroundImg, backgroundMask, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, gameTitleText, gameWinText, gameOverText, tryAgainText, yesBtn, yesBtnHover, noBtn, noBtnHover)
 
     local menu = {}
     setmetatable(menu, Menu)
@@ -39,6 +39,7 @@ function Menu:create(state, fontSrc, isOnePlayer, startBackgroundImg, choiseBack
 
     menu.startBackgroundImg = startBackgroundImg
     menu.choiseBackgroundImg = choiseBackgroundImg
+    menu.backgroundMask = backgroundMask
 
     menu.onePlayer = onePlayerBtn
     menu.twoPlayer = twoPlayerBtn
@@ -52,6 +53,11 @@ function Menu:create(state, fontSrc, isOnePlayer, startBackgroundImg, choiseBack
 
     menu.startBtn = startBtn
     menu.startBtnHover = startBtnHover
+
+    menu.gameTitleText = gameTitleText
+    menu.gameWinText = gameWinText
+    menu.gameOverText = gameOverText
+    menu.tryAgainText = tryAgainText
 
     menu.yes = yesBtn
     menu.no = noBtn
@@ -109,7 +115,29 @@ function Menu:update(dt)
 
     elseif self.state == StateMenu.INTERMEDIATE then
 
+        -- nothing
 
+    elseif self.state == StateMenu.WIN or self.state == StateMenu.FAIL or self.state == StateMenu.LEFT_WIN or self.state == StateMenu.RIGHT_WIN then
+
+        -- yes btn handler
+        if menu:isInside(width / 2 - self.yes:getWidth() + 49, height * (68/100) + 49, self.yes:getWidth() - 98, self.yes:getHeight() - 98) then
+            menu.yes = menu.yesBtnHover
+            if love.mouse.isDown("1") then
+                self.state = StateMenu.INTERMEDIATE
+            end
+        else
+            menu.yes = menu.yesBtn
+        end
+
+        -- no btn handler
+        if menu:isInside(width / 2 + 49, height * (68/100) + 49, self.no:getWidth() - 98, self.no:getHeight() - 98) then
+            menu.no = menu.noBtnHover
+            if love.mouse.isDown("1") then
+                self.state = StateMenu.START
+            end
+        else
+            menu.no = menu.noBtn
+        end
 
     end
 
@@ -135,19 +163,39 @@ function Menu:draw()
 
     elseif self.state == StateMenu.WIN then
 
-	   -- TODO
+        love.graphics.draw(self.backgroundMask)
+
+        love.graphics.draw(self.gameWinText, width /2 - self.gameWinText:getWidth() /2, height * (25/100))
+        love.graphics.draw(self.tryAgainText, width /2 - self.tryAgainText:getWidth() /2, height * (56/100))
+        love.graphics.draw(self.yes, width /2 - self.yes:getWidth(), height * (68/100))
+        love.graphics.draw(self.no, width /2, height * (68/100))
 
     elseif self.state == StateMenu.FAIL then
 
-        -- TODO
+        love.graphics.draw(self.backgroundMask)
+
+        love.graphics.draw(self.gameOverText, width /2 - self.gameWinText:getWidth() /2, height * (25/100))
+        love.graphics.draw(self.tryAgainText, width /2 - self.tryAgainText:getWidth() /2, height * (56/100))
+        love.graphics.draw(self.yes, width /2 - self.yes:getWidth(), height * (68/100))
+        love.graphics.draw(self.no, width /2, height * (68/100))
 
     elseif self.state == StateMenu.LEFT_WIN then
 
-        -- TODO
+        love.graphics.draw(self.backgroundMask)
+
+        love.graphics.draw(self.gameWinText, width /2 - self.gameWinText:getWidth() /2, height * (25/100))
+        love.graphics.draw(self.tryAgainText, width /2 - self.tryAgainText:getWidth() /2, height * (56/100))
+        love.graphics.draw(self.yes, width /2 - self.yes:getWidth(), height * (68/100))
+        love.graphics.draw(self.no, width /2, height * (68/100))
 
     elseif self.state == StateMenu.RIGHT_WIN then
 
-        -- TODO
+        love.graphics.draw(self.backgroundMask)
+
+        love.graphics.draw(self.gameWinText, width /2 - self.gameWinText:getWidth() /2, height * (25/100))
+        love.graphics.draw(self.tryAgainText, width /2 - self.tryAgainText:getWidth() /2, height * (56/100))
+        love.graphics.draw(self.yes, width /2 - self.yes:getWidth(), height * (68/100))
+        love.graphics.draw(self.no, width /2, height * (68/100))
 
     end
 end

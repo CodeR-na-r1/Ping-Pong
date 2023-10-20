@@ -13,7 +13,7 @@ function love.load()
 
     -- constants
 
-    MAX_SCORE_PARTY = 5
+    MAX_SCORE_PARTY = 1
 
     -- window settings
 
@@ -28,6 +28,7 @@ function love.load()
 
     backgroundImg = love.graphics.newImage('resources/img/background.png')
     local choiseBackgroundImg = love.graphics.newImage('resources/img/startBackground.png')
+    local backgroundMaskImg = love.graphics.newImage('resources/img/backgroundMask.png')
 
     local onePlayerBtn = love.graphics.newImage('resources/img/1player.png')
     local twoPlayerBtn = love.graphics.newImage('resources/img/2player.png')
@@ -36,6 +37,11 @@ function love.load()
 
     local startBtn = love.graphics.newImage('resources/img/start.png')
     local startBtnHover = love.graphics.newImage('resources/img/startHover.png')
+
+    local gameTitleText = love.graphics.newImage('resources/img/gameTitle.png')
+    local gameWinText = love.graphics.newImage('resources/img/youWin.png')
+    local gameOverText = love.graphics.newImage('resources/img/gameOver.png')
+    local tryAgainText = love.graphics.newImage('resources/img/tryAgain.png')
 
     local yesBtn = love.graphics.newImage('resources/img/yes.png')
     local yesBtnHover = love.graphics.newImage('resources/img/yesHover.png')
@@ -53,7 +59,7 @@ function love.load()
 
     isOnePlayer = true
 
-    menu = Menu:create(StateMenu.START, "resources/font/SPACE.ttf", isOnePlayer, backgroundImg, choiseBackgroundImg, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, yesBtn, yesBtnHover, noBtn, noBtnHover)
+    menu = Menu:create(StateMenu.START, "resources/font/SPACE.ttf", isOnePlayer, backgroundImg, choiseBackgroundImg, backgroundMaskImg, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, gameTitleText, gameWinText, gameOverText, tryAgainText, yesBtn, yesBtnHover, noBtn, noBtnHover)
 
     puck = Puck:create(puckImg, Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 450)
     puck:setVAcceleration(Vector:create(-10, love.math.random(-5, 5)))
