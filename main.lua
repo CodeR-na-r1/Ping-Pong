@@ -11,6 +11,10 @@ require "artificalPlayer"
 
 function love.load()
 
+    -- constants
+
+    MAX_SCORE_PARTY = 5
+
     -- window settings
 
     love.window.setTitle("Ping&Pong")
@@ -23,7 +27,7 @@ function love.load()
     -- load resources
 
     backgroundImg = love.graphics.newImage('resources/img/background.png')
-    local startBackgroundImg = love.graphics.newImage('resources/img/startBackground.png')
+    local choiseBackgroundImg = love.graphics.newImage('resources/img/startBackground.png')
 
     local onePlayerBtn = love.graphics.newImage('resources/img/1player.png')
     local twoPlayerBtn = love.graphics.newImage('resources/img/2player.png')
@@ -47,7 +51,9 @@ function love.load()
 
     -- init game objects
 
-    menu = Menu:create(StateMenu.START, pngstartBackgroundImg, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, yesBtn, yesBtnHover, noBtn, noBtnHover)
+    isOnePlayer = true
+
+    menu = Menu:create(StateMenu.START, "resources/font/SPACE.ttf", isOnePlayer, backgroundImg, choiseBackgroundImg, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, yesBtn, yesBtnHover, noBtn, noBtnHover)
 
     puck = Puck:create(puckImg, Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 450)
     puck:setVAcceleration(Vector:create(-10, love.math.random(-5, 5)))
@@ -60,8 +66,6 @@ function love.load()
     gameAgent = GameAgent:create(fontScore)
 
     artificalPlayer = ArtificalPlayer:create(puck, leftBoard)
-
-    isOnePlayer = true
 
     isStopGame = true
     isReInit = true
@@ -121,7 +125,10 @@ function love.update(dt)
 
     else    -- prepare (reInit) objects for new game
 
+        menu:update(dt)
+
         if isReInit == false then
+
             if game:isLeftDir() == true then
                 gameAgent:incRightScore()
             else
@@ -139,9 +146,30 @@ function love.update(dt)
             artificalPlayer = ArtificalPlayer:create(puck, leftBoard)
 
             isReInit = true
+            menu:changeState(StateMenu.INTERMEDIATE)
         end
 
-        -- check finish game (score > 10) + init menu
+        if gameAgent:isEndParty(MAX_SCORE_PARTY) then   -- check finish game (score > 10) + init menu
+            if gameAgent:isLeftWin() then
+                if isOnePlayer == true then
+                    menu:changeState(StateMenu.FAIL)
+                else
+                    menu:changeState(StateMenu.LEFT_WIN)
+                end
+            else
+                if isOnePlayer == true then
+                    menu:changeState(StateMenu.WIN)
+                else
+                    menu:changeState(StateMenu.RIGHT_WIN)
+                end
+            end
+
+            gameAgent:reset()
+        -- elseif menu.state ~= StateMenu.START and menu.state ~= StateMenu.CHOISE then
+
+        --     menu:changeState(StateMenu.INTERMEDIATE)
+        end
+
     end
   
 end
@@ -161,12 +189,7 @@ function love.draw()
 
     game:draw()
     
-    if isReInit == true then
-
-        -- menu action
-
-	    drawCenteredText("PRESS ANY KEY FOR START", width /2, height /4)
-    end
+    menu:draw()
 
 end
 
@@ -190,10 +213,18 @@ function keyboardEvent()
 
 end
 
+function love.mousemoved(x, y, dx, dy, istouch)
+    
+    menu.x = x
+    menu.y = y
+
+end
+
 function love.keypressed(key)
-    if isReInit == true then
+    if menu.state == StateMenu.INTERMEDIATE then
 
         isStopGame = false
         isReInit = false
+        menu.state = StateMenu.PLAYING
     end
 end

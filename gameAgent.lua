@@ -28,6 +28,28 @@ function GameAgent:incRightScore()
     self.rightScore = self.rightScore + 1
 end
 
+function GameAgent:isEndParty(scoresValue)
+
+    if self.leftScore >= scoresValue or self.rightScore >= scoresValue then
+        return true
+    else
+        return false
+    end
+
+end
+
+function GameAgent:isLeftWin()
+
+    return self.leftScore > self.rightScore
+
+end
+
+function GameAgent:reset()
+
+    self.leftScore = 0
+    self.rightScore = 0
+end
+
 function GameAgent:draw()
 
     drawCenteredText(self.leftScore .. " : " .. self.rightScore, width / 2, 50, self.font)
