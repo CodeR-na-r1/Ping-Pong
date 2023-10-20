@@ -1,6 +1,8 @@
 ArtificalPlayer = {}
 ArtificalPlayer.__index = ArtificalPlayer
 
+-- Class description: implementation of a computer opponent
+
 function ArtificalPlayer:create(puckObj, boardObj, latency)
 
     local artificalPlayer = {}

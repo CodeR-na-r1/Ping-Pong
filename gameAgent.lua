@@ -1,5 +1,7 @@
 require "textFormatter"
 
+-- Class description: counting the game score
+
 GameAgent = {}
 GameAgent.__index = GameAgent
 

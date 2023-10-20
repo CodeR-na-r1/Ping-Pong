@@ -1,3 +1,5 @@
+-- output formatted text
+
 function drawCenteredText(text, x, y, font)
 
 	_font = nil or font

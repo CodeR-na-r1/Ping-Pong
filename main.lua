@@ -9,9 +9,19 @@ require "artificalPlayer"
 
 function love.load()
 
+    -- window settings
+
     love.window.setTitle("Ping&Pong")
 
+    width = love.graphics.getWidth()
+    height = love.graphics.getHeight()
+
+    -- love.graphics.setBackgroundColor(240 / 255, 190 / 255, 172 / 255)
+
+    -- load resources
+
     backgroundImg = love.graphics.newImage('resources/img/background.png')
+
     puckImg = love.graphics.newImage("resources/img/puckImg.png") 
     moveBoardImg = love.graphics.newImage("resources/img/boardImg.png")
 
@@ -19,10 +29,7 @@ function love.load()
     fontScore = love.graphics.newFont("resources/font/SPACE.ttf", 50)
     love.graphics.setFont(font)
 
-    width = love.graphics.getWidth()
-    height = love.graphics.getHeight()
-
-    love.graphics.setBackgroundColor(240 / 255, 190 / 255, 172 / 255)
+    -- init game objects
 
     puck = Puck:create(puckImg, Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 450)
     puck:setVAcceleration(Vector:create(-10, love.math.random(-5, 5)))
@@ -36,14 +43,16 @@ function love.load()
 
     artificalPlayer = ArtificalPlayer:create(puck, leftBoard)
 
-    stopGame = true
+    isOnePlayer = true
+
+    isStopGame = true
     isReInit = true
 
 end
 
 function love.update(dt)
 
-    if stopGame == false then
+    if isStopGame == false then
 
         puck:update(dt)
 
@@ -64,7 +73,7 @@ function love.update(dt)
             end
 
             if puck.vLocation.x - puck.iSize < leftBoard.vLocation.x then
-                stopGame = true
+                isStopGame = true
             end
 
         elseif puck.vLocation.x + puck.iSize > rightBoard.vLocation.x then
@@ -81,16 +90,18 @@ function love.update(dt)
             end
 
             if puck.vLocation.x + puck.iSize > rightBoard.vLocation.x + rightBoard.vSize.x then
-                stopGame = true
+                isStopGame = true
             end
         
         end
 
         keyboardEvent()
 
-        artificalPlayer:update(dt)
+        if isOnePlayer == true then
+            artificalPlayer:update(dt)
+        end
 
-    else
+    else    -- prepare (reInit) objects for new game
 
         if isReInit == false then
             if game:isLeftDir() == true then
@@ -112,7 +123,7 @@ function love.update(dt)
             isReInit = true
         end
 
-        -- check finish game (score > 10)
+        -- check finish game (score > 10) + init menu
     end
   
 end
@@ -134,6 +145,8 @@ function love.draw()
     
     if isReInit == true then
 
+        -- menu action
+
 	    drawCenteredText("PRESS ANY KEY FOR START", width /2, height /4)
     end
 
@@ -141,11 +154,13 @@ end
 
 function keyboardEvent()
 
-    if love.keyboard.isDown('w') then
-        leftBoard:applyForce(Vector:create(0, -150))
-    end
-    if love.keyboard.isDown('s') then
-        leftBoard:applyForce(Vector:create(0, 150))
+    if isOnePlayer == false then
+        if love.keyboard.isDown('w') then
+            leftBoard:applyForce(Vector:create(0, -150))
+        end
+        if love.keyboard.isDown('s') then
+            leftBoard:applyForce(Vector:create(0, 150))
+        end
     end
 
     if love.keyboard.isDown('up') then
@@ -160,7 +175,7 @@ end
 function love.keypressed(key)
     if isReInit == true then
 
-        stopGame = false
+        isStopGame = false
         isReInit = false
     end
 end

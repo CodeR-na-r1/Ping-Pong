@@ -1,6 +1,8 @@
 Puck = {}
 Puck.__index = Puck
 
+-- Class description: implementaion of the puck object
+
 function Puck:create(texture, vLocation, iSize, vMinXY, vMaxXY, maxVelocity)
 
     local puck = {}
@@ -114,13 +116,18 @@ end
 
 function Puck:randomizeYDirection()
 
-    yRatio = math.random(1, 200)
+    yRatio = math.random(1, 10)
 
     newDir = self.vVelocity:norm()
     newDir.y = newDir.y * yRatio
     newDir = newDir:norm()
 
-    self.vVelocity.x = self.vVelocity.x * math.abs(newDir.x)
-    self.vVelocity.y = self.vVelocity.y * math.abs(newDir.y)
+    sum = math.abs(self.vVelocity.x + self.vVelocity.y)
+
+    -- self.vVelocity.x = self.vVelocity.x * math.abs(newDir.x)
+    -- self.vVelocity.y = self.vVelocity.y * math.abs(newDir.y)
+
+    self.vVelocity.x = sum * newDir.x
+    self.vVelocity.y = sum * newDir.y
 
 end

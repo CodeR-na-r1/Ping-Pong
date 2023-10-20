@@ -1,6 +1,8 @@
 Vector = {}
 Vector.__index = Vector
 
+-- Class description: basic operations when working with a vector
+
 function Vector:create(x, y)
     local vector = {}
     setmetatable(vector, Vector)

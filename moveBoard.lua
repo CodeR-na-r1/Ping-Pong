@@ -1,5 +1,7 @@
 require "vector"
 
+-- Class description: implementaion of the board object
+
 MoveBoard = {}
 MoveBoard.__index = MoveBoard
 

@@ -1,6 +1,8 @@
 Game = {}
 Game.__index = Game
 
+-- Class description: checking the conditions of hitting the puck by the player
+
 function Game:create(puckObj, moveBoardLeft, moveBoardRight)
     local game = {}
     setmetatable(game, Game)
