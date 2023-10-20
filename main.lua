@@ -1,3 +1,5 @@
+require "menu"
+
 require "puck"
 require "moveBoard"
 
@@ -21,6 +23,20 @@ function love.load()
     -- load resources
 
     backgroundImg = love.graphics.newImage('resources/img/background.png')
+    local startBackgroundImg = love.graphics.newImage('resources/img/startBackground.png')
+
+    local onePlayerBtn = love.graphics.newImage('resources/img/1player.png')
+    local twoPlayerBtn = love.graphics.newImage('resources/img/2player.png')
+    local onePlayerBtnHover = love.graphics.newImage('resources/img/1playerHover.png')
+    local twoPlayerBtnHover = love.graphics.newImage('resources/img/2playerHover.png')
+
+    local startBtn = love.graphics.newImage('resources/img/start.png')
+    local startBtnHover = love.graphics.newImage('resources/img/startHover.png')
+
+    local yesBtn = love.graphics.newImage('resources/img/yes.png')
+    local yesBtnHover = love.graphics.newImage('resources/img/yesHover.png')
+    local noBtn = love.graphics.newImage('resources/img/no.png')
+    local noBtnHover = love.graphics.newImage('resources/img/noHover.png')
 
     puckImg = love.graphics.newImage("resources/img/puckImg.png") 
     moveBoardImg = love.graphics.newImage("resources/img/boardImg.png")
@@ -30,6 +46,8 @@ function love.load()
     love.graphics.setFont(font)
 
     -- init game objects
+
+    menu = Menu:create(StateMenu.START, pngstartBackgroundImg, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, yesBtn, yesBtnHover, noBtn, noBtnHover)
 
     puck = Puck:create(puckImg, Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 450)
     puck:setVAcceleration(Vector:create(-10, love.math.random(-5, 5)))
