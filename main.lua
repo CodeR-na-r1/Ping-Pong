@@ -13,7 +13,7 @@ function love.load()
 
     -- constants
 
-    MAX_SCORE_PARTY = 1
+    MAX_SCORE_PARTY = 2
 
     -- window settings
 
@@ -73,6 +73,7 @@ function love.load()
 
     artificalPlayer = ArtificalPlayer:create(puck, leftBoard)
 
+    isReInitObjects = true
     isStopGame = true
     isReInit = true
 
@@ -141,6 +142,29 @@ function love.update(dt)
                 gameAgent:incLeftScore()
             end
 
+            menu:changeState(StateMenu.INTERMEDIATE)
+
+            if gameAgent:isEndParty(MAX_SCORE_PARTY) then   -- check finish game (score > 10) + init menu
+                if gameAgent:isLeftWin() then
+                    if isOnePlayer == true then
+                        menu:changeState(StateMenu.FAIL)
+                    else
+                        menu:changeState(StateMenu.LEFT_WIN)
+                    end
+                else
+                    if isOnePlayer == true then
+                        menu:changeState(StateMenu.WIN)
+                    else
+                        menu:changeState(StateMenu.RIGHT_WIN)
+                    end
+                end
+            end
+
+            isReInit = true
+        end
+
+        if isReInitObjects == false then
+            
             puck = Puck:create(puckImg, Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 450)
             puck:setVAcceleration(Vector:create(-10, love.math.random(-5, 5)))
         
@@ -151,29 +175,17 @@ function love.update(dt)
 
             artificalPlayer = ArtificalPlayer:create(puck, leftBoard)
 
-            isReInit = true
-            menu:changeState(StateMenu.INTERMEDIATE)
-        end
-
-        if gameAgent:isEndParty(MAX_SCORE_PARTY) then   -- check finish game (score > 10) + init menu
-            if gameAgent:isLeftWin() then
-                if isOnePlayer == true then
-                    menu:changeState(StateMenu.FAIL)
-                else
-                    menu:changeState(StateMenu.LEFT_WIN)
-                end
-            else
-                if isOnePlayer == true then
-                    menu:changeState(StateMenu.WIN)
-                else
-                    menu:changeState(StateMenu.RIGHT_WIN)
-                end
+            if gameAgent:isEndParty(MAX_SCORE_PARTY) then
+                
+                gameAgent:reset()
             end
+            
+            isStopGame = false
+            isReInit = false
+            menu.state = StateMenu.PLAYING
 
-            gameAgent:reset()
-        -- elseif menu.state ~= StateMenu.START and menu.state ~= StateMenu.CHOISE then
+            isReInitObjects = true
 
-        --     menu:changeState(StateMenu.INTERMEDIATE)
         end
 
     end
@@ -229,8 +241,6 @@ end
 function love.keypressed(key)
     if menu.state == StateMenu.INTERMEDIATE then
 
-        isStopGame = false
-        isReInit = false
-        menu.state = StateMenu.PLAYING
+        isReInitObjects = false
     end
 end
