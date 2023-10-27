@@ -26,6 +26,9 @@ function love.load()
 
     -- load resources
 
+    musicBackground = love.audio.newSource("resources/music/musicBackground.mp3", "stream")
+    musicBackground:setVolume(0.2) -- one octave lower
+
     backgroundImg = love.graphics.newImage('resources/img/background.png')
     local choiseBackgroundImg = love.graphics.newImage('resources/img/startBackground.png')
     local backgroundMaskImg = love.graphics.newImage('resources/img/backgroundMask.png')
@@ -64,7 +67,12 @@ function love.load()
     menu = Menu:create(StateMenu.START, "resources/font/SPACE.ttf", isOnePlayer, backgroundImg, choiseBackgroundImg, backgroundMaskImg, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, gameTitleText, gameWinText, gameOverText, LeftWinText, RightWinText, tryAgainText, yesBtn, yesBtnHover, noBtn, noBtnHover)
 
     puck = Puck:create(puckImg, Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 450)
-    puck:setVAcceleration(Vector:create(-10, love.math.random(-5, 5)))
+    local puckDir = love.math.random(0, 1)
+    print(puckDir)
+    if puckDir == 0 then
+        puckDir = -1
+    end
+    puck:setVAcceleration(Vector:create(-10, love.math.random(3, 7) * puckDir))
 
     leftBoard = MoveBoard:create(moveBoardImg, Vector:create(25, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height), 600)
     rightBoard = MoveBoard:create(moveBoardImg, Vector:create(width - 25 - 30, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height), 600)
@@ -83,6 +91,10 @@ end
 
 function love.update(dt)
 
+    if not musicBackground:isPlaying() then
+		love.audio.play(musicBackground)
+	end
+
     if isStopGame == false then
 
         puck:update(dt)
@@ -96,7 +108,7 @@ function love.update(dt)
             
             if game._isInside then
                 puck:invertVVelocity()
-                puck:randomizeYDirection()
+                -- puck:randomizeYDirection()
                 if puck.maxVelocity < 1000 then
                     puck:setMaxVelocity(puck.maxVelocity * 1.04)
                     leftBoard:setMaxVelocity(puck.maxVelocity * 1.3)
@@ -113,7 +125,7 @@ function love.update(dt)
             
             if game._isInside then
                 puck:invertVVelocity()
-                puck:randomizeYDirection()
+                -- puck:randomizeYDirection()
                 if puck.maxVelocity < 1000 then
                     puck:setMaxVelocity(puck.maxVelocity * 1.04)
                     rightBoard:setMaxVelocity(puck.maxVelocity * 1.3)
@@ -172,7 +184,12 @@ function love.update(dt)
         if isReInitObjects == false then
             
             puck = Puck:create(puckImg, Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 450)
-            puck:setVAcceleration(Vector:create(-10, love.math.random(-5, 5)))
+            local puckDir = love.math.random(0, 1)
+            print(puckDir)
+            if puckDir == 0 then
+                puckDir = -1
+            end
+            puck:setVAcceleration(Vector:create(-10, love.math.random(3, 7) * puckDir))
         
             leftBoard = MoveBoard:create(moveBoardImg, Vector:create(25, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height), 600)
             rightBoard = MoveBoard:create(moveBoardImg, Vector:create(width - 25 - 30, height /2 - 75), Vector:create(30, 150), Vector:create(0, 0), Vector:create(width, height), 600)
@@ -211,7 +228,7 @@ function love.draw()
     leftBoard:draw()
     rightBoard:draw()
 
-    game:draw()
+    -- game:draw()
     
     menu:draw()
 

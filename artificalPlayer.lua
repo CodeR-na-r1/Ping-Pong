@@ -31,33 +31,35 @@ end
 
 function ArtificalPlayer:__doAction()
 
-    -- if self.puckObj.vVelocity.x < 0 then
-
-    --     local middleBoard = self.boardObj.vLocation.y + self.boardObj.vSize.y /2
-
-    --     if middleBoard < self.puckObj.vLocation.y then
-
-    --         self.boardObj:applyForce(Vector:create(0, 150))
-
-    --     elseif middleBoard > self.puckObj.vLocation.y then
-
-    --         self.boardObj:applyForce(Vector:create(0, -150))
-    --     end
-
-    -- end
-
     if self.puckObj.vVelocity.x < 0 then
 
-        local middleBoard = self.boardObj.vLocation.y + self.boardObj.vSize.y /2
+        local speedY = self.puckObj.vLocation.y - (self.boardObj.vLocation.y + self.boardObj.vSize.y / 2)
 
-        if self.boardObj.vLocation.y < self.puckObj.vLocation.y then
-
-            self.boardObj:applyForce(Vector:create(0, 150))
-
-        elseif self.boardObj.vLocation.y + self.boardObj.vSize.y > self.puckObj.vLocation.y then
-
-            self.boardObj:applyForce(Vector:create(0, -150))
+        if self.boardObj.vLocation.y - 10 > self.puckObj.vLocation.y then
+            -- self.boardObj.vLocation.y = self.boardObj.vLocation.y - 2
+            self.boardObj:applyForce(Vector:create(0, speedY /5))
+        elseif self.boardObj.vLocation.y + self.boardObj.vSize.y + 10 < self.puckObj.vLocation.y then
+            -- self.boardObj.vLocation.y = self.boardObj.vLocation.y + 2
+            self.boardObj:applyForce(Vector:create(0, speedY /5))
         end
+        -- self.boardObj.vLocation = Vector:create(self.boardObj.vLocation.x, speedY)
+
+        -- local maxSpeed = math.abs(self.puckObj.maxVelocity)
+        -- if maxSpeed < 100 then
+        --     maxSpeed = 100
+        -- end
+        -- print(maxSpeed)
+
+        -- if math.abs(speedY) > maxSpeed then
+
+        --     if speedY < 0 then
+        --         speedY = -maxSpeed
+        --     else
+        --         speedY = maxSpeed
+        --     end
+        -- end
+
+        -- self.boardObj:setVelocity(Vector:create(0, speedY))
 
     end
 

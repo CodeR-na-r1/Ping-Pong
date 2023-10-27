@@ -38,6 +38,8 @@ function Puck:update(dt)
     self.vVelocity = self.vVelocity + self.vAcceleration
     self.vVelocity = self.vVelocity:limit(self.maxVelocity)
 
+    -- print("puck speed = ")
+    -- print(self.vVelocity * dt)
     self.vLocation = self.vLocation + self.vVelocity * dt
     
     self.vAcceleration = self.vAcceleration * 0
@@ -114,20 +116,34 @@ function Puck:invertVVelocity()
 
 end
 
+-- function Puck:randomizeYDirection()
+
+--     yRatio = math.random(1, 10)
+
+--     newDir = self.vVelocity:norm()
+--     newDir.y = newDir.y * yRatio
+--     newDir = newDir:norm()
+
+--     sum = math.abs(self.vVelocity.x + self.vVelocity.y)
+
+--     -- self.vVelocity.x = self.vVelocity.x * math.abs(newDir.x)
+--     -- self.vVelocity.y = self.vVelocity.y * math.abs(newDir.y)
+
+--     self.vVelocity.x = sum * newDir.x
+--     self.vVelocity.y = sum * newDir.y
+
+-- end
+
 function Puck:randomizeYDirection()
 
     yRatio = math.random(1, 10)
 
     newDir = self.vVelocity:norm()
+    speed = self.vVelocity:mag()
+
     newDir.y = newDir.y * yRatio
     newDir = newDir:norm()
 
-    sum = math.abs(self.vVelocity.x + self.vVelocity.y)
-
-    -- self.vVelocity.x = self.vVelocity.x * math.abs(newDir.x)
-    -- self.vVelocity.y = self.vVelocity.y * math.abs(newDir.y)
-
-    self.vVelocity.x = sum * newDir.x
-    self.vVelocity.y = sum * newDir.y
+    self.vVelocity = newDir * speed
 
 end

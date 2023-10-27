@@ -20,6 +20,8 @@ function MoveBoard:create(texture, vLocation, vSize, vMinXY, vMaxXY, maxVelocity
 
     moveBoard.maxVelocity = maxVelocity or 3
 
+    moveBoard.isSetSpeed = false
+
     moveBoard.isMove = false
     moveBoard.iCounter = 0
 
@@ -30,7 +32,7 @@ function MoveBoard:create(texture, vLocation, vSize, vMinXY, vMaxXY, maxVelocity
 
     moveBoard.animationScale = 5
 
-    moveBoard.framesCounts = 10
+    moveBoard.framesCounts = 3
 
     return moveBoard
 
@@ -38,7 +40,18 @@ end
 
 function MoveBoard:update(dt)
 
-    if self.isMove then
+    if self.isSetSpeed then
+        self.isSetSpeed = false
+        self.vVelocity = self.vVelocity + self.vAcceleration
+        -- self.vVelocity = self.vVelocity:limit(self.maxVelocity)
+        -- print("board speed = ")
+        -- print(self.vVelocity * dt)
+        self.vLocation = self.vLocation + self.vVelocity * dt
+        self.vVelocity = self.vVelocity * 0
+
+        self:checkBoundaries()
+
+    elseif self.isMove then
 
         self.vVelocity = self.vVelocity + self.vAcceleration
         self.vVelocity = self.vVelocity:limit(self.maxVelocity)
@@ -113,6 +126,7 @@ end
 
 function MoveBoard:setVelocity(vValue)
     self.vVelocity = vValue
+    self.isSetSpeed = true
 end
 
 function MoveBoard:setMaxVelocity(vValue)
@@ -121,4 +135,5 @@ end
 
 function MoveBoard:setAcceleration(vValue)
     self.vAcceleration = vValue
+    self.isSetSpeed = true
 end
