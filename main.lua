@@ -13,7 +13,7 @@ function love.load()
 
     -- constants
 
-    MAX_SCORE_PARTY = 2
+    MAX_SCORE_PARTY = 3
 
     -- window settings
 
@@ -41,6 +41,8 @@ function love.load()
     local gameTitleText = love.graphics.newImage('resources/img/gameTitle.png')
     local gameWinText = love.graphics.newImage('resources/img/youWin.png')
     local gameOverText = love.graphics.newImage('resources/img/gameOver.png')
+    local LeftWinText = love.graphics.newImage('resources/img/leftWin.png')
+    local RightWinText = love.graphics.newImage('resources/img/rightWin.png')
     local tryAgainText = love.graphics.newImage('resources/img/tryAgain.png')
 
     local yesBtn = love.graphics.newImage('resources/img/yes.png')
@@ -59,7 +61,7 @@ function love.load()
 
     isOnePlayer = true
 
-    menu = Menu:create(StateMenu.START, "resources/font/SPACE.ttf", isOnePlayer, backgroundImg, choiseBackgroundImg, backgroundMaskImg, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, gameTitleText, gameWinText, gameOverText, tryAgainText, yesBtn, yesBtnHover, noBtn, noBtnHover)
+    menu = Menu:create(StateMenu.START, "resources/font/SPACE.ttf", isOnePlayer, backgroundImg, choiseBackgroundImg, backgroundMaskImg, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, gameTitleText, gameWinText, gameOverText, LeftWinText, RightWinText, tryAgainText, yesBtn, yesBtnHover, noBtn, noBtnHover)
 
     puck = Puck:create(puckImg, Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 450)
     puck:setVAcceleration(Vector:create(-10, love.math.random(-5, 5)))
@@ -133,6 +135,10 @@ function love.update(dt)
     else    -- prepare (reInit) objects for new game
 
         menu:update(dt)
+
+        if menu.state == StateMenu.START then
+            gameAgent:reset()
+        end
 
         if isReInit == false then
 

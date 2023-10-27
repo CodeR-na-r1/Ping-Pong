@@ -21,12 +21,13 @@ StateMenu = {
 
 -- Class description: displaying the desired menu items
 
-function Menu:create(state, fontSrc, isOnePlayer, startBackgroundImg, choiseBackgroundImg, backgroundMask, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, gameTitleText, gameWinText, gameOverText, tryAgainText, yesBtn, yesBtnHover, noBtn, noBtnHover)
+function Menu:create(state, fontSrc, isOnePlayer, startBackgroundImg, choiseBackgroundImg, backgroundMask, onePlayerBtn, twoPlayerBtn, onePlayerBtnHover, twoPlayerBtnHover, startBtn, startBtnHover, gameTitleText, gameWinText, gameOverText, LeftWinText, RightWinText, tryAgainText, yesBtn, yesBtnHover, noBtn, noBtnHover)
 
     local menu = {}
     setmetatable(menu, Menu)
 
     menu.state = state
+    menu.isInput = false
 
     menu.fontSrc = fontSrc
 
@@ -57,6 +58,9 @@ function Menu:create(state, fontSrc, isOnePlayer, startBackgroundImg, choiseBack
     menu.gameTitleText = gameTitleText
     menu.gameWinText = gameWinText
     menu.gameOverText = gameOverText
+    menu.LeftWinText = LeftWinText
+    menu.RightWinText = RightWinText
+
     menu.tryAgainText = tryAgainText
 
     menu.yes = yesBtn
@@ -78,11 +82,19 @@ end
 
 function Menu:update(dt)
 
+    if love.mouse.isDown("1") and self.isInput then
+        return
+    else
+        self.isInput = false
+    end
+
     if self.state == StateMenu.START then
 
-	    if menu:isInside(width / 2 - self.startBtn:getWidth() /2 + 49, height * (5/8) - self.startBtn:getHeight() /2 + 49, self.startBtn:getWidth() - 98, self.startBtn:getHeight() - 98) then
+	    if menu:isInside(width / 2 - self.startBtn:getWidth() /2 + 49, height * (6/8) - self.startBtn:getHeight() /2 + 49, self.startBtn:getWidth() - 98, self.startBtn:getHeight() - 98) then
             menu.start = menu.startBtnHover
             if love.mouse.isDown("1") then
+                self.isInput = true
+                print("start end")
                 self.state = StateMenu.CHOISE
             end
         else
@@ -95,6 +107,8 @@ function Menu:update(dt)
         if menu:isInside(width / 2 - self.onePlayerBtn:getWidth() + 49, height * (7/12) + 49, self.onePlayerBtn:getWidth() - 98, self.onePlayerBtn:getHeight() - 98) then
             menu.onePlayer = menu.onePlayerBtnHover
             if love.mouse.isDown("1") then
+                self.isInput = true
+                print("choise end")
                 isOnePlayer = true
                 self.state = StateMenu.INTERMEDIATE
             end
@@ -106,6 +120,8 @@ function Menu:update(dt)
         if menu:isInside(width / 2 + 49, height * (7/12) + 49, self.twoPlayer:getWidth() - 98, self.twoPlayer:getHeight() - 98) then
             menu.twoPlayer = menu.twoPlayerBtnHover
             if love.mouse.isDown("1") then
+                self.isInput = true
+                print("choise end")
                 isOnePlayer = false
                 self.state = StateMenu.INTERMEDIATE
             end
@@ -123,6 +139,8 @@ function Menu:update(dt)
         if menu:isInside(width / 2 - self.yes:getWidth() + 49, height * (68/100) + 49, self.yes:getWidth() - 98, self.yes:getHeight() - 98) then
             menu.yes = menu.yesBtnHover
             if love.mouse.isDown("1") then
+                self.isInput = true
+                print("yes end")
                 self.state = StateMenu.INTERMEDIATE
             end
         else
@@ -133,6 +151,8 @@ function Menu:update(dt)
         if menu:isInside(width / 2 + 49, height * (68/100) + 49, self.no:getWidth() - 98, self.no:getHeight() - 98) then
             menu.no = menu.noBtnHover
             if love.mouse.isDown("1") then
+                self.isInput = true
+                print("no end")
                 self.state = StateMenu.START
             end
         else
@@ -148,8 +168,8 @@ function Menu:draw()
     if self.state == StateMenu.START then
 
         love.graphics.draw(self.startBackgroundImg)
-	    drawCenteredText("PONG", width /2, height /4, self.titleFont)
-        love.graphics.draw(self.start, width / 2 - self.startBtn:getWidth() /2, height * (5/8) - self.startBtn:getHeight() /2)
+        love.graphics.draw(self.gameTitleText, width /2 - self.gameTitleText:getWidth() /2, height /2 - self.gameTitleText:getHeight())
+        love.graphics.draw(self.start, width / 2 - self.startBtn:getWidth() /2, height * (6/8) - self.startBtn:getHeight() /2)
 
     elseif self.state == StateMenu.CHOISE then
 
@@ -174,7 +194,7 @@ function Menu:draw()
 
         love.graphics.draw(self.backgroundMask)
 
-        love.graphics.draw(self.gameOverText, width /2 - self.gameWinText:getWidth() /2, height * (25/100))
+        love.graphics.draw(self.gameOverText, width /2 - self.gameOverText:getWidth() /2, height * (25/100))
         love.graphics.draw(self.tryAgainText, width /2 - self.tryAgainText:getWidth() /2, height * (56/100))
         love.graphics.draw(self.yes, width /2 - self.yes:getWidth(), height * (68/100))
         love.graphics.draw(self.no, width /2, height * (68/100))
@@ -183,7 +203,7 @@ function Menu:draw()
 
         love.graphics.draw(self.backgroundMask)
 
-        love.graphics.draw(self.gameWinText, width /2 - self.gameWinText:getWidth() /2, height * (25/100))
+        love.graphics.draw(self.LeftWinText, width /2 - self.LeftWinText:getWidth() /2, height * (25/100))
         love.graphics.draw(self.tryAgainText, width /2 - self.tryAgainText:getWidth() /2, height * (56/100))
         love.graphics.draw(self.yes, width /2 - self.yes:getWidth(), height * (68/100))
         love.graphics.draw(self.no, width /2, height * (68/100))
@@ -192,7 +212,7 @@ function Menu:draw()
 
         love.graphics.draw(self.backgroundMask)
 
-        love.graphics.draw(self.gameWinText, width /2 - self.gameWinText:getWidth() /2, height * (25/100))
+        love.graphics.draw(self.RightWinText, width /2 - self.RightWinText:getWidth() /2, height * (25/100))
         love.graphics.draw(self.tryAgainText, width /2 - self.tryAgainText:getWidth() /2, height * (56/100))
         love.graphics.draw(self.yes, width /2 - self.yes:getWidth(), height * (68/100))
         love.graphics.draw(self.no, width /2, height * (68/100))
