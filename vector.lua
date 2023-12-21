@@ -1,6 +1,11 @@
 Vector = {}
 Vector.__index = Vector
 
+function math.map(value, imin, imax, omin, omax)
+    local scale = (omax - omin) / (imax - imin)
+    return omin + (value - imin) * scale
+end
+
 -- Class description: basic operations when working with a vector
 
 function Vector:create(x, y)

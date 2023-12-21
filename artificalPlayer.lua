@@ -11,8 +11,15 @@ function ArtificalPlayer:create(puckObj, boardObj, latency)
     artificalPlayer.puckObj = puckObj
     artificalPlayer.boardObj = boardObj
 
-    artificalPlayer.latency = latency or 0
+    artificalPlayer.maxForce = 3000
+
+    artificalPlayer.latency = latency or 0.02
     artificalPlayer.timeCoutner = 0
+
+    self.predictYCoord = 0
+
+    self.precentError = 0
+    self.failStrategy = false
 
     return artificalPlayer
 end
@@ -29,38 +36,73 @@ function ArtificalPlayer:update(dt)
 
 end
 
+function ArtificalPlayer:draw()
+
+    love.graphics.circle("fill", 55, self.predictYCoord, 4)
+end
+
+function ArtificalPlayer:increasingError()
+
+    self.precentError = self.precentError + 1
+
+end
+
+function ArtificalPlayer:rethinkTactics()
+
+    local p = love.math.random(0, 100)
+    if p < self.precentError then
+        self.failStrategy = true
+    end
+
+    -- print(self.precentError)
+    -- print(self.failStrategy)
+end
+
 function ArtificalPlayer:__doAction()
 
     if self.puckObj.vVelocity.x < 0 then
 
-        local speedY = self.puckObj.vLocation.y - (self.boardObj.vLocation.y + self.boardObj.vSize.y / 2)
+        -- predict y coord
+        local boardX = self.boardObj.vLocation.x + self.boardObj.vSize.x
+        local predictYRatio = math.abs((self.puckObj.vLocation.x - boardX) / self.puckObj.vVelocity.x)
+        self.predictYCoord = self.puckObj.vLocation.y + self.puckObj.vVelocity.y * predictYRatio
 
-        if self.boardObj.vLocation.y - 10 > self.puckObj.vLocation.y then
-            -- self.boardObj.vLocation.y = self.boardObj.vLocation.y - 2
-            self.boardObj:applyForce(Vector:create(0, speedY /5))
-        elseif self.boardObj.vLocation.y + self.boardObj.vSize.y + 10 < self.puckObj.vLocation.y then
-            -- self.boardObj.vLocation.y = self.boardObj.vLocation.y + 2
-            self.boardObj:applyForce(Vector:create(0, speedY /5))
+        -- if the tactics are losing, then we distort the end point
+        local assignPredict = math.abs(self.predictYCoord) / self.predictYCoord
+        if self.failStrategy then
+            self.predictYCoord = self.predictYCoord + (self.boardObj.vSize.y * 1.1) * assignPredict
         end
-        -- self.boardObj.vLocation = Vector:create(self.boardObj.vLocation.x, speedY)
+        
+        if self.predictYCoord < 0 then
+            self.predictYCoord = -self.predictYCoord
+        elseif self.predictYCoord > height then
+            self.predictYCoord = height - (self.predictYCoord % height)
+        end
 
-        -- local maxSpeed = math.abs(self.puckObj.maxVelocity)
-        -- if maxSpeed < 100 then
-        --     maxSpeed = 100
-        -- end
-        -- print(maxSpeed)
+        -- strive for this point
+        
+        local desiredY = self.predictYCoord - self.boardObj.vSize.y /2  - self.boardObj.vLocation.y
 
-        -- if math.abs(speedY) > maxSpeed then
+        assignDesired = math.abs(desiredY) / desiredY
 
-        --     if speedY < 0 then
-        --         speedY = -maxSpeed
-        --     else
-        --         speedY = maxSpeed
-        --     end
-        -- end
+        -- magic constant 40 == quantity of pixels to target point
+        if math.abs(desiredY) < 40 then
+            desiredY = math.map(math.abs(desiredY), 0, 40, 0, self.boardObj.maxVelocity) * assignDesired
+            -- print(desiredY)
+        else
+            desiredY = self.boardObj.maxVelocity * assignDesired
+            -- print(desiredY)
+        end
 
-        -- self.boardObj:setVelocity(Vector:create(0, speedY))
+        local steerY = desiredY - self.boardObj.vVelocity.y
 
+        assignSteer = math.abs(steerY) / steerY
+        if math.abs(steerY) > self.maxForce then
+            steerY = self.maxForce * assignSteer
+        end
+
+        self.boardObj:setAcceleration(Vector:create(0, steerY))
+        
     end
 
 end

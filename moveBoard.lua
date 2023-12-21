@@ -41,13 +41,15 @@ end
 function MoveBoard:update(dt)
 
     if self.isSetSpeed then
+        
         self.isSetSpeed = false
         self.vVelocity = self.vVelocity + self.vAcceleration
         -- self.vVelocity = self.vVelocity:limit(self.maxVelocity)
         -- print("board speed = ")
         -- print(self.vVelocity * dt)
         self.vLocation = self.vLocation + self.vVelocity * dt
-        self.vVelocity = self.vVelocity * 0
+        -- self.vVelocity:mul(0)
+        self.vAcceleration:mul(0)
 
         self:checkBoundaries()
 

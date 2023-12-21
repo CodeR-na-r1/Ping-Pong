@@ -94,7 +94,6 @@ function Menu:update(dt)
             menu.start = menu.startBtnHover
             if love.mouse.isDown("1") then
                 self.isInput = true
-                print("start end")
                 self.state = StateMenu.CHOISE
             end
         else
@@ -108,7 +107,6 @@ function Menu:update(dt)
             menu.onePlayer = menu.onePlayerBtnHover
             if love.mouse.isDown("1") then
                 self.isInput = true
-                print("choise end")
                 isOnePlayer = true
                 self.state = StateMenu.INTERMEDIATE
             end
@@ -121,7 +119,6 @@ function Menu:update(dt)
             menu.twoPlayer = menu.twoPlayerBtnHover
             if love.mouse.isDown("1") then
                 self.isInput = true
-                print("choise end")
                 isOnePlayer = false
                 self.state = StateMenu.INTERMEDIATE
             end
@@ -140,7 +137,6 @@ function Menu:update(dt)
             menu.yes = menu.yesBtnHover
             if love.mouse.isDown("1") then
                 self.isInput = true
-                print("yes end")
                 self.state = StateMenu.INTERMEDIATE
             end
         else
@@ -152,7 +148,6 @@ function Menu:update(dt)
             menu.no = menu.noBtnHover
             if love.mouse.isDown("1") then
                 self.isInput = true
-                print("no end")
                 self.state = StateMenu.START
             end
         else

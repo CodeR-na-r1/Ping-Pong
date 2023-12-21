@@ -27,7 +27,10 @@ function love.load()
     -- load resources
 
     musicBackground = love.audio.newSource("resources/music/musicBackground.mp3", "stream")
-    musicBackground:setVolume(0.2) -- one octave lower
+    musicBackground:setVolume(0.1) -- one octave lower
+
+    musicBeatingPuck = love.audio.newSource("resources/music/beatingPuck.mp3", "static")
+    musicBeatingPuck:setVolume(0.1) -- one octave lower
 
     backgroundImg = love.graphics.newImage('resources/img/background.png')
     local choiseBackgroundImg = love.graphics.newImage('resources/img/startBackground.png')
@@ -68,7 +71,6 @@ function love.load()
 
     puck = Puck:create(puckImg, Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 450)
     local puckDir = love.math.random(0, 1)
-    print(puckDir)
     if puckDir == 0 then
         puckDir = -1
     end
@@ -95,7 +97,7 @@ function love.update(dt)
 		love.audio.play(musicBackground)
 	end
 
-    if isStopGame == false then
+    if isStopGame == false then 
 
         puck:update(dt)
 
@@ -107,11 +109,15 @@ function love.update(dt)
             game:update(dt)
             
             if game._isInside then
+                
+                if not musicBeatingPuck:isPlaying() then
+                    love.audio.play(musicBeatingPuck)
+                end
                 puck:invertVVelocity()
                 -- puck:randomizeYDirection()
                 if puck.maxVelocity < 1000 then
                     puck:setMaxVelocity(puck.maxVelocity * 1.04)
-                    leftBoard:setMaxVelocity(puck.maxVelocity * 1.3)
+                    leftBoard:setMaxVelocity(puck.maxVelocity * 2)
                 end
             end
 
@@ -124,7 +130,15 @@ function love.update(dt)
             game:update(dt)
             
             if game._isInside then
+
+                if not musicBeatingPuck:isPlaying() then
+                    love.audio.play(musicBeatingPuck)
+                end
                 puck:invertVVelocity()
+                
+                artificalPlayer:increasingError()
+                artificalPlayer:rethinkTactics()
+
                 -- puck:randomizeYDirection()
                 if puck.maxVelocity < 1000 then
                     puck:setMaxVelocity(puck.maxVelocity * 1.04)
@@ -185,7 +199,6 @@ function love.update(dt)
             
             puck = Puck:create(puckImg, Vector:create(width / 2, height / 2), 30, Vector:create(0, 0), Vector:create(width, height), 450)
             local puckDir = love.math.random(0, 1)
-            print(puckDir)
             if puckDir == 0 then
                 puckDir = -1
             end
@@ -231,6 +244,9 @@ function love.draw()
     -- game:draw()
     
     menu:draw()
+
+    -- temp
+    -- artificalPlayer:draw()
 
 end
 
